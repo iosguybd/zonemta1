@@ -1,0 +1,52 @@
+version: "3.2"
+
+services:
+  mongodb:
+    image: mongo:4.0
+    volumes:
+      - ./db:/data/db
+    restart: unless-stopped
+    networks:
+      - default
+    ports:
+      - 27017:27017
+  redis:
+    image: "redis:4-alpine"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis:/data
+    restart: unless-stopped
+    networks:
+      - default
+  zonemta:
+    depends_on:
+      - mongodb
+      - redis
+    build: ./src
+    volumes:
+      - ./config:/zone-mta/config
+    restart: unless-stopped
+    networks:
+      - default
+    ports:
+      - 2525:2525
+      - 12080
+      # - 12081:12080
+    environment:
+      - "NODE_ENV=production"
+  admin:
+    depends_on:
+      - zonemta
+      - mongodb
+      - redis
+    build: ./admin-src
+    volumes:
+      - ./admin-config:/zone-mta-admin/config
+    restart: unless-stopped
+    networks:
+      - default
+    ports:
+      - 8082:8082
+    environment:
+      - "NODE_ENV=production"

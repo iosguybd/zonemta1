@@ -1,0 +1,13 @@
+# Database configuration
+# this file is loaded when NODE_ENV=production
+
+# MongoDB connection string
+mongo="mongodb://mongodb:27017/zone-mta"
+#mongo="mongodb://127.0.0.1:27017/zone-mta"
+
+# Redis connection string
+redis="redis://redis:6379/2"
+#redis="redis://127.0.0.1:27017/zone-mta"
+
+# Database name for ZoneMTA data in MongoDB. In most cases it should be the same as in the connection string
+sender="zone-mta"
